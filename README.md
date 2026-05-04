@@ -127,6 +127,9 @@ NEXT_PUBLIC_API_URL=https://your-backend-url
 ## 📸 Screenshots (Optional)
 
 *Add screenshots here to make it even more attractive*
+<img width="1909" height="875" alt="Screenshot 2026-05-04 155428" src="https://github.com/user-attachments/assets/c67e5f2e-758f-419d-bf7e-e990441d288e" />
+<img width="1893" height="877" alt="Screenshot 2026-05-04 155407" src="https://github.com/user-attachments/assets/63bdb863-7cac-4bd6-a7ac-f59a3a560f96" />
+
 
 ---
 
