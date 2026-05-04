@@ -4,21 +4,27 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ThemeToggle } from '../themeToggle';
 import { UserRound, ChevronDown, LogOut, UserPen, PanelRight } from 'lucide-react';
 import { Logout } from '@/app/(helper)/helperFunction';
-import { spawn } from 'child_process';
-import Link from 'next/link';
+
 
 type HeaderProps = {
-  setSidebarCollapsed: () => void;
+  setSidebarCollapsed: (value: any) => void
   sidebarCollapsed: any;
   sidebarOpen: any;
-  onClose: () => void;
+onClose: (value: boolean) => void
   setProfileModal:any
 }
 
 export default function Header({ setSidebarCollapsed, sidebarCollapsed, sidebarOpen, onClose,setProfileModal }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const userdata = localStorage.getItem("user");
+const [userdata, setUserdata] = useState<string | null>(null);
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const data = localStorage.getItem("user");
+    setUserdata(data);
+  }
+}, []);
   console.log("header ===>props==?>", sidebarCollapsed);
 
   useEffect(() => {
@@ -72,7 +78,7 @@ export default function Header({ setSidebarCollapsed, sidebarCollapsed, sidebarO
 
           <span className="group relative flex items-center justify-center cursor-pointer font-semibold tracking-tight w-30 " onClick={() => {
             (!sidebarCollapsed == !sidebarOpen) ?
-            onClose(true) : setSidebarCollapsed((p) => !p)
+            onClose(true) : setSidebarCollapsed((p:any) => !p)
           }}>
             {((sidebarCollapsed && !sidebarOpen) || (!sidebarCollapsed == !sidebarOpen)) && (
               <>
