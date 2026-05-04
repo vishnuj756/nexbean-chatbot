@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 type SideBarProps = {
   onClose?: () => void;
-  setSidebarCollapsed:()=>void;
+  setSidebarCollapsed:(value:any)=>void;
   sidebarCollapsed:any;
 };
 
@@ -105,7 +105,7 @@ export default function SideBar({ onClose,setSidebarCollapsed ,sidebarCollapsed}
 
             <button
               className="ml-3 hidden md:flex items-center justify-center w-9 h-9 rounded-[0.6rem] border border-indigo-500/20 bg-indigo-500/[0.07] text-indigo-500 cursor-pointer transition-[background,box-shadow] duration-[180ms] hover:bg-indigo-500/[0.14] hover:shadow-[0_2px_10px_rgba(99,102,241,0.18)] dark:border-indigo-400/25 dark:bg-indigo-400/10 dark:text-indigo-300 dark:hover:bg-indigo-400/[0.18]"
-              onClick={() => setSidebarCollapsed((p) => !p)}
+              onClick={() => setSidebarCollapsed((p:any) => !p)}
               aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               <PanelLeftOpen size={16} />
