@@ -1,0 +1,187 @@
+openapi: 3.0.0
+info:
+  title: NexBean AI API
+  version: 1.0.0
+  description: AI Chatbot (NexBean) with text, image, and voice support.
+
+servers:
+  - url: http://localhost:3000
+    description: Local Development Server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "66f1c2a9..."
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          example: "john@gmail.com"
+
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        token:
+          type: string
+          example: "jwt_token_here"
+        user:
+          $ref: '#/components/schemas/UserResponse'
+
+paths:
+  # --- AUTHENTICATION ---
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      description: Creates a new user account for NexBean and returns a JWT.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                email:
+                  type: string
+                  example: "john@gmail.com"
+                password:
+                  type: string
+                  format: password
+                  example: "123456"
+      responses:
+        201:
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        400:
+          description: User already exists or invalid input
+
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user
+      description: Authenticates user and returns JWT token for NexBean access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: "john@gmail.com"
+                password:
+                  type: string
+                  format: password
+                  example: "123456"
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        401:
+          description: Invalid email or password
+
+  # --- CHAT FUNCTIONALITY ---
+  /api/chat/send:
+    post:
+      tags:
+        - Chat
+      summary: Send message to NexBean AI
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - message
+              properties:
+                type:
+                  type: string
+                  enum: [text, image, voice]
+                  example: "text"
+                message:
+                  type: string
+                  example: "Hello NexBean, how are you?"
+                fileUrl:
+                  type: string
+                  format: uri
+                  example: "https://image.com/img.jpg"
+      responses:
+        200:
+          description: AI response returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reply:
+                    type: string
+                    example: "Hello! I am NexBean, your AI assistant."
+        401:
+          description: Unauthorized - JWT missing or invalid
+
+  /api/chat/history:
+    get:
+      tags:
+        - Chat
+      summary: Get chat history
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: List of previous chats returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    message:
+                      type: string
+                    sender:
+                      type: string
+                      enum: [user, bot]
+                    timestamp:
+                      type: string
+                      format: date-time
+        401:
+          description: Unauthorized
